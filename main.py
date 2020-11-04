@@ -1,24 +1,24 @@
 '''
 Readme Development Metrics With waka time progress
 '''
-import re
-import os
 import base64
-from pytz import timezone
-import pytz
-import requests
-from github import Github, GithubException, InputGitAuthor
 import datetime
-from string import Template
-from loc import LinesOfCode
+import json
+import os
+import re
 import time
 import traceback
-import humanize
+from string import Template
 from urllib.parse import quote
-import json
-import sys
 
+import humanize
+import pytz
+import requests
 from dotenv import load_dotenv
+from github import Github, InputGitAuthor
+from pytz import timezone
+
+from loc import LinesOfCode
 
 load_dotenv()
 
@@ -289,7 +289,7 @@ def generate_commit_list(tz):
 def get_waka_time_stats():
     stats = ''
     request = requests.get(
-        f"https://wakatime.com/api/v1/users/current/stats/last_7_days?api_key={waka_key}")
+        f"https://wakatime.com/api/v1/users/current/stats/last_30_days?api_key={waka_key}")
     no_activity = translate["No Activity Tracked This Week"]
 
     if request.status_code == 401:
