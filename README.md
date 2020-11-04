@@ -1,3 +1,9 @@
+
+## This was forked from anmol098/waka-readme-stats, with some custom customizations by solonovamax.
+Do not expect it to work for anything other than what's in my profile.
+
+## README
+
 > Looking For Translation to different languages & Locale  [#23](https://github.com/anmol098/waka-readme-stats/issues/23)
 
 # Dev Metrics in Readme with added feature flags 🎌

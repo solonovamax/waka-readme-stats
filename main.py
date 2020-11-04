@@ -245,7 +245,8 @@ def generate_commit_list(tz):
 
     sumAll = morning + daytime + evening + night
     sum_week = Sunday + Monday + Tuesday + Friday + Saturday + Wednesday + Thursday
-    title = translate['I am an Early'] if morning + daytime >= evening + night else translate['I am a Night']
+    title = translate['When I work']
+    subtitle = translate['I am an Early'] if morning + daytime >= evening + night else translate['I am a Night']
     one_day = [
         {"name": "🌞 " + translate['Morning'], "text": str(morning) + " commits",
          "percent": round((morning / sumAll) * 100, 2)},
@@ -270,7 +271,7 @@ def generate_commit_list(tz):
         {"name": translate['Sunday'], "text": str(Sunday) + " commits", "percent": round((Sunday / sum_week) * 100, 2)},
     ]
 
-    string = string + '**' + title + '** \n\n' + '```text\n' + make_commit_list(one_day) + '\n\n```\n'
+    string = string + '**' + title + '** \n\n' + '```text\n' + subtitle + ': \n' + make_commit_list(one_day) + '\n\n'
 
     if show_days_of_week.lower() in truthy:
         max_element = {
@@ -281,7 +282,9 @@ def generate_commit_list(tz):
             if day['percent'] > max_element['percent']:
                 max_element = day
         days_title = translate['I am Most Productive on'] + ' ' + max_element['name']
-        string = string + '📅 **' + days_title + '** \n\n' + '```text\n' + make_commit_list(dayOfWeek) + '\n\n```\n'
+        string = string + '\n' + days_title + ': \n' + make_commit_list(dayOfWeek) + '\n\n```\n'
+    else:
+        string = string + '```\n'
 
     return string
 
@@ -301,7 +304,7 @@ def get_waka_time_stats():
             empty = False
             stats = stats + generate_commit_list(tz=data['data']['timezone']) + '\n\n'
 
-        stats += '📊 **' + translate['This Week I Spend My Time On'] + '** \n\n'
+        stats += '**' + translate['This Week I Spend My Time On'] + '** \n\n'
         stats += '```text\n'
         if showTimeZone.lower() in truthy:
             empty = False
@@ -471,7 +474,7 @@ def get_stats(github):
 
 def star_me():
     requests.put("https://api.github.com/user/starred/anmol098/waka-readme-stats", headers=headers)
-    
+
 
 def decode_readme(data: str):
     '''Decode the contents of old readme'''
