@@ -92,7 +92,7 @@ on:
   schedule:
     # Runs at 12am IST
     - cron: '30 18 * * *'
-
+  workflow_dispatch:
 jobs:
   update-readme:
     name: Update Readme with Metrics
@@ -103,6 +103,8 @@ jobs:
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 ```
+- Now you can commit and wait for run automatically, but you can also trigger to run it to see the result now. Just go to the `Actions` in your repo and select your `Profile Readme Development Stats` workflow and click in `Run workflow`. Now wait for a minute or two and you will see your changes.
+
 ## Extras
 
 1. If you want to add the other info to your stats, you can add multiple `FLAGS` in your workflow file by default all flags are enabled 
@@ -123,6 +125,7 @@ jobs:
 
 `LOCALE`  This Flag can be used to show stats in your language default is english uses Locale [Short Hand](https://saimana.com/list-of-country-locale-code/) to be passed in the flag variable example of the final result can be found [here](https://github.com/anmol098/anmol098/blob/master/Readme-fr.md)
 
+`COMMIT_BY_ME`        flag can be set to `True` to commit the code using your name and email
 
 `SHOW_LINES_OF_CODE`       flag can be set to `True` to show the Lines of code writen till date
 
@@ -263,11 +266,13 @@ Contributions are welcome! ♥! Please share any features, and add unit tests! U
 
 1. [Anmol Pratap Singh](https://github.com/anmol098): Maintainer
 2. [Prabhat Singh](https://github.com/prabhatdev): For code timeline graph [#18](https://github.com/anmol098/waka-readme-stats/pull/18)
+2. [Aravind V. Nair](https://github.com/aravindvnair99): For Pull Request [#188](https://github.com/anmol098/waka-readme-stats/pull/188) And Other improvements
 3. [Hedy Li](https://github.com/hedythedev): For Pull Request [#34](https://github.com/anmol098/waka-readme-stats/pull/34) and [#23](https://github.com/anmol098/waka-readme-stats/pull/23)
 4. [Pedro Torres](https://github.com/Corfucinas): For Pull Request [#29](https://github.com/anmol098/waka-readme-stats/pull/29)
 5. [Aaron Meese](https://github.com/ajmeese7): For Pull Request [#45](https://github.com/anmol098/waka-readme-stats/pull/45)
 6. [Arnav Jindal](https://github.com/Daggy1234): For Pull Request [#48](https://github.com/anmol098/waka-readme-stats/pull/48)
-7. [Daniel Rowe](https://github.com/DanRowe1): For Pull Request [#57](https://github.com/anmol098/waka-readme-stats/pull/57)
+7. [Daniel Rowe](https://github.com/DanRowe): For Pull Request [#57](https://github.com/anmol098/waka-readme-stats/pull/57)
+8. [Ss5h](https://github.com/tlatkdgus1): For adding support for natural sentence writing for translatio [#136](https://github.com/anmol098/waka-readme-stats/pull/136)
 
 <details>
 <summary>Special mention for those who are currently making their profile readme more awesome :smile: :tada:</summary>
@@ -338,7 +343,7 @@ Contributions are welcome! ♥! Please share any features, and add unit tests! U
   
   - [Jude Wilson](https://github.com/mr-winson)
   
-  - [Daniel Rowe](https://github.com/DanRowe1)
+  - [Daniel Rowe](https://github.com/DanRowe)
   
   - [Muhammad Hassan Ahmed](https://github.com/hassan11196)
   
@@ -363,6 +368,20 @@ Contributions are welcome! ♥! Please share any features, and add unit tests! U
   - [Raman Preet Singh](https://github.com/raman08)
   
   - [Hayat Tamboli](https://github.com/hayat-tamboli)
+  
+  - [Henry Boisdequin](https://github.com/henryboisdequin)
+   
+  - [Raman Preet Singh](https://github.com/raman08)
+  
+  - [Aadit Kamat](https://github.com/aaditkamat)
+    
+  - [Subhalingam D](https://github.com/subhalingamd)
+  
+  - [Adil Akhmetov](https://github.com/weeebdev)
+  
+  - [Isaac Maldonado](https://github.com/einjunge99)
+  
+  - [Syed Faateh Sultan Kazmi](https://github.com/faatehsultan)
 
   
 

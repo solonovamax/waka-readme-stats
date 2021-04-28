@@ -41,12 +41,14 @@ showLocChart = os.getenv('INPUT_SHOW_LOC_CHART')
 show_profile_view = os.getenv('INPUT_SHOW_PROFILE_VIEWS')
 show_short_info = os.getenv('INPUT_SHOW_SHORT_INFO')
 locale = os.getenv('INPUT_LOCALE')
+commit_by_me = os.getenv('INPUT_COMMIT_BY_ME')
 show_waka_stats = 'y'
 # The GraphQL query to get commit data.
 userInfoQuery = """
 {
     viewer {
       login
+      email
       id
     }
   }
@@ -241,7 +243,8 @@ def generate_commit_list(tz):
                 if weekday == "Sunday":
                     Sunday += 1
         except Exception as ex:
-            print("Please Ignore this exception " + str(ex))
+            if str(ex) != "'NoneType' object is not subscriptable":
+                print("Exception occurred " + str(ex))
 
     sumAll = morning + daytime + evening + night
     sum_week = Sunday + Monday + Tuesday + Friday + Saturday + Wednesday + Thursday
@@ -281,7 +284,7 @@ def generate_commit_list(tz):
         for day in dayOfWeek:
             if day['percent'] > max_element['percent']:
                 max_element = day
-        days_title = translate['I am Most Productive on'] + ' ' + max_element['name']
+        days_title = translate['I am Most Productive on'] % max_element['name']
         string = string + '\n' + days_title + ': \n' + make_commit_list(dayOfWeek) + '\n\n```\n'
     else:
         string = string + '```\n'
@@ -381,23 +384,15 @@ def generate_language_per_repo(result):
             "percent": percent
         })
 
-    title = translate['I Mostly Code in'] + ' ' + most_language_repo
+    title = translate['I Mostly Code in'] % most_language_repo
     return '**' + title + '** \n\n' + '```text\n' + make_list(data) + '\n\n```\n'
 
 
 def get_line_of_code():
-    result = run_query(createContributedRepoQuery.substitute(username=username))
-    nodes = result["data"]["user"]["repositoriesContributedTo"]["nodes"]
-    repos = [d for d in nodes if d['isFork'] is False]
-    total_loc = 0
-    for repository in repos:
-        try:
-            time.sleep(0.7)
-            datas = run_v3_api(get_loc_url.substitute(owner=repository["owner"]["login"], repo=repository["name"]))
-            for data in datas:
-                total_loc = total_loc + data[1] - data[2]
-        except Exception as execp:
-            print(execp)
+    repositoryList = run_query(repositoryListQuery.substitute(username=username, id=id))
+    loc = LinesOfCode(id, username, ghtoken, repositoryList)
+    yearly_data = loc.calculateLoc()
+    total_loc = sum([yearly_data[year][quarter][lang] for year in yearly_data for quarter in yearly_data[year] for lang in yearly_data[year][quarter]])
     return humanize.intword(int(total_loc))
 
 
@@ -414,10 +409,9 @@ def get_short_info(github):
         data = request.json()
         total = data['years'][0]['total']
         year = data['years'][0]['year']
-        string += '> 🏆 ' + humanize.intcomma(total) + " " + translate[
-            'Contributions in the year'] + " " + year + '\n > \n'
+        string += '> 🏆 ' + translate['Contributions in the year'] % (humanize.intcomma(total), year) + '\n > \n'
 
-    string += '> 📦 ' + disk_usage + " " + translate["Used in GitHub's Storage"] + ' \n > \n'
+    string += '> 📦 ' + translate["Used in GitHub's Storage"] % disk_usage + ' \n > \n'
     is_hireable = user_info.hireable
     public_repo = user_info.public_repos
     private_repo = user_info.owned_private_repos
@@ -428,12 +422,10 @@ def get_short_info(github):
     else:
         string += "> 🚫 " + translate["Not Opted to Hire"] + "\n > \n"
 
-    string += '> 📜 ' + str(public_repo) + " "
-    string += translate['public repositories'] + '\n > \n' if public_repo > 1 else translate[
-                                                                                       'public repository'] + ' \n > \n'
-    string += '> 🔑 ' + str(private_repo) + " "
-    string += translate['private repositories'] + ' \n\n' if private_repo > 1 else translate[
-                                                                                       'private repository'] + ' \n > \n'
+    string += '> 📜 '
+    string += translate['public repositories'] % public_repo + " " + '\n > \n' if public_repo != 1 else translate['public repository'] % public_repo + " " + '\n > \n'
+    string += '> 🔑 '
+    string += translate['private repositories'] % private_repo + " " +' \n > \n' if private_repo != 1 else translate['private repository'] % private_repo + " " + '\n > \n'
 
     return string
 
@@ -465,16 +457,17 @@ def get_stats(github):
 
     if showLocChart.lower() in truthy:
         loc = LinesOfCode(id, username, ghtoken, repositoryList)
-        loc.calculateLoc()
+        yearly_data = loc.calculateLoc()
+        loc.plotLoc(yearly_data)
         stats += '**' + translate['Timeline'] + '**\n\n'
-        stats = stats + '![Chart not found](https://github.com/' + username + '/' + username + '/blob/master/charts/bar_graph.png) \n\n'
+        branch_name = github.get_repo(f'{username}/{username}').default_branch
+        stats = stats + '![Chart not found](https://raw.githubusercontent.com/' + username + '/' + username + '/' + branch_name + '/charts/bar_graph.png) \n\n'
 
     return stats
 
 
-def star_me():
-    requests.put("https://api.github.com/user/starred/anmol098/waka-readme-stats", headers=headers)
-
+# def star_me():
+    # requests.put("https://api.github.com/user/starred/anmol098/waka-readme-stats", headers=headers)
 
 def decode_readme(data: str):
     '''Decode the contents of old readme'''
@@ -496,8 +489,9 @@ if __name__ == '__main__':
         headers = {"Authorization": "Bearer " + ghtoken}
         user_data = run_query(userInfoQuery)  # Execute the query
         username = user_data["data"]["viewer"]["login"]
+        email = user_data["data"]["viewer"]["email"]
         id = user_data["data"]["viewer"]["id"]
-        print(username)
+        print("Username " + username)
         repo = g.get_repo(f"{username}/{username}")
         contents = repo.get_readme()
         try:
@@ -508,10 +502,13 @@ if __name__ == '__main__':
             print("Cannot find the Locale choosing default to english")
             translate = data['en']
         waka_stats = get_stats(g)
-        star_me()
+        # star_me()
         rdmd = decode_readme(contents.content)
         new_readme = generate_new_readme(stats=waka_stats, readme=rdmd)
-        committer = InputGitAuthor('readme-bot', 'readme-bot@example.com')
+        if commit_by_me.lower() in truthy:
+            committer = InputGitAuthor(username, email)
+        else:
+            committer = InputGitAuthor('readme-bot', '41898282+github-actions[bot]@users.noreply.github.com')
         if new_readme != rdmd:
             try:
                 repo.update_file(path=contents.path, message='Updated with Dev Metrics',
