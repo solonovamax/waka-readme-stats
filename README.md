@@ -127,6 +127,10 @@ jobs:
 
 `COMMIT_BY_ME`        flag can be set to `True` to commit the code using your name and email
 
+`COMMIT_MESSAGE`        flag can be to set message commit, default is "Updated with Dev Metrics"
+
+`SHOW_UPDATED_DATE`        flag can be set to `True` to show updated date in end of paragraph
+
 `SHOW_LINES_OF_CODE`       flag can be set to `True` to show the Lines of code writen till date
 
 ![Lines of code](https://img.shields.io/badge/From%20Hello%20World%20I've%20written-1.3%20million%20Lines%20of%20code-blue)
@@ -239,6 +243,8 @@ CSS          2 repos        █░░░░░░░░░░░░░░░░�
 
 `SHOW_LOC_CHART`  flag can be set to `False` to hide the Lines of code written in different quarters of different year
 
+`IGNORED_REPOS`  flag can be set to `"waka-readme-stats, my-first-repo"` (just an example) to ignore some repos you don’t want to be counted
+
 **Timeline**
 
 ![Chart not found](https://raw.githubusercontent.com/anmol098/anmol098/master/charts/bar_graph.png) 
@@ -272,7 +278,7 @@ Contributions are welcome! ♥! Please share any features, and add unit tests! U
 5. [Aaron Meese](https://github.com/ajmeese7): For Pull Request [#45](https://github.com/anmol098/waka-readme-stats/pull/45)
 6. [Arnav Jindal](https://github.com/Daggy1234): For Pull Request [#48](https://github.com/anmol098/waka-readme-stats/pull/48)
 7. [Daniel Rowe](https://github.com/DanRowe): For Pull Request [#57](https://github.com/anmol098/waka-readme-stats/pull/57)
-8. [Ss5h](https://github.com/tlatkdgus1): For adding support for natural sentence writing for translatio [#136](https://github.com/anmol098/waka-readme-stats/pull/136)
+8. [Ss5h](https://github.com/tlatkdgus1): For adding support for natural sentence writing for translation [#136](https://github.com/anmol098/waka-readme-stats/pull/136)
 
 <details>
 <summary>Special mention for those who are currently making their profile readme more awesome :smile: :tada:</summary>
@@ -382,6 +388,14 @@ Contributions are welcome! ♥! Please share any features, and add unit tests! U
   - [Isaac Maldonado](https://github.com/einjunge99)
   
   - [Syed Faateh Sultan Kazmi](https://github.com/faatehsultan)
+
+  - [Shreyam Maity](https://github.com/ShreyamMaity)
+
+  - [Sufiane](https://github.com/sufiane)
+
+  - [Muhammad Bilal](https://github.com/BilalJaved15)
+
+  - [Waterdev](https://github.com/UnrealValentin)
 
   
 

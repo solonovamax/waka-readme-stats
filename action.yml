@@ -82,6 +82,26 @@ inputs:
     description: "Git commit with your own name and email"
     default: "False"
 
+  IGNORED_REPOS:
+    required: false
+    description: "Repos you don't want to be counted"
+    default: ""
+  
+  COMMIT_MESSAGE:
+    required: false
+    description: "Git commit message"
+    default: "Updated with Dev Metrics"
+  
+  SHOW_UPDATED_DATE:
+    required: false
+    description: "Show updated date"
+    default: "True"
+
+  SHOW_TOTAL_CODE_TIME:
+    required: false
+    description: "Show Total Time you have coded"
+    default: "True"
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
