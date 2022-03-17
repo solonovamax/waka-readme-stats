@@ -188,7 +188,7 @@ Windows                  8 hrs 46 mins       ███████████�
 `SHOW_PROJECTS` flag can be set to `False` to hide the Projects worked on
 
 ```text
-🐱‍💻 Projects:
+🐱💻 Projects:
 ctx_connector            4 hrs 3 mins        ███████████░░░░░░░░░░░░░░   46.33%
 NetSuite-Connector       1 hr 31 mins        ████░░░░░░░░░░░░░░░░░░░░░   17.29%
 mango-web-master         1 hr 12 mins        ███░░░░░░░░░░░░░░░░░░░░░░   13.77%

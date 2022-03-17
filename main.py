@@ -1,20 +1,17 @@
-'''
+"""
 Readme Development Metrics With waka time progress
-'''
+"""
 import base64
 import datetime
 import json
 import os
 import re
-import time
 import traceback
 from string import Template
 from urllib.parse import quote
-import json
-import sys
-from datetime import date
-import math
+
 import humanize
+import math
 import pytz
 import requests
 from dotenv import load_dotenv
@@ -173,7 +170,7 @@ def run_query(query):
 
 
 def make_graph(percent: float):
-    '''Make progress graph from API graph'''
+    """Make progress graph from API graph"""
     done_block = '█'
     empty_block = '░'
     pc_rnd = round(percent)
@@ -181,7 +178,7 @@ def make_graph(percent: float):
 
 
 def make_list(data: list):
-    '''Make List'''
+    """Make List"""
     data_list = []
     for l in data[:5]:
         ln = len(l['name'])
@@ -192,7 +189,7 @@ def make_list(data: list):
 
 
 def make_commit_list(data: list):
-    '''Make List'''
+    """Make List"""
     data_list = []
     for l in data[:7]:
         ln = len(l['name'])
@@ -356,7 +353,7 @@ def get_waka_time_stats():
                 # Re-order the project list by percentage
                 data['data']['projects'] = sorted(data['data']['projects'], key=lambda x: x["percent"], reverse=True)
                 project_list = make_list(data['data']['projects'])
-            stats = stats + '🐱‍💻 ' + translate['Projects'] + ': \n' + project_list + '\n\n'
+            stats = stats + '🐱💻 ' + translate['Projects'] + ': \n' + project_list + '\n\n'
 
         if showOs.lower() in truthy:
             empty = False
@@ -452,23 +449,25 @@ def get_short_info(github):
         string += "> 🚫 " + translate["Not Opted to Hire"] + "\n > \n"
 
     string += '> 📜 '
-    string += translate['public repositories'] % public_repo + " " + '\n > \n' if public_repo != 1 else translate[
-                                                                                                            'public repository'] % public_repo + " " + '\n > \n'
+    string += translate['public repositories'] % public_repo + " " + '\n > \n' \
+        if public_repo != 1 else translate['public repository'] % public_repo + " " + '\n > \n'
     string += '> 🔑 '
-    string += translate['private repositories'] % private_repo + " " + ' \n > \n' if private_repo != 1 else translate[
-                                                                                                                'private repository'] % private_repo + " " + '\n > \n'
+    string += translate['private repositories'] % private_repo + " " + ' \n > \n' \
+        if private_repo != 1 else translate['private repository'] % private_repo + " " + '\n > \n'
 
     return string
 
 
 def get_stats(github):
-    '''Gets API data and returns markdown progress'''
+    """Gets API data and returns markdown progress"""
 
     stats = ''
     repositoryList = run_query(repositoryListQuery.substitute(username=username, id=id))
-    
+    print("Here is repository list: " + str(repositoryList))
+
     if show_loc.lower() in truthy or showLocChart.lower() in truthy:
-        # This condition is written to calculate the lines of code because it is heavy process soo needs to be calculate once this will reduce the execution time
+        # This condition is written to calculate the lines of code because it is heavy process soo needs to be calculate once this will
+        # reduce the execution time
         yearly_data = get_yearly_data()
 
     if show_total_code_time.lower() in truthy:
@@ -480,13 +479,12 @@ def get_stats(github):
             print("User stats are calculating. Try again later.")
         else:
             data = request.json()
-            stats += '![Code Time](http://img.shields.io/badge/' + quote(
-                str("Code Time")) + '-' + quote(str(
-                data['data']['text'])) + '-blue)\n\n'
+            stats += '![Code Time](https://img.shields.io/badge/' + quote(str("Code Time")) + '-' + quote(str(data['data']['text'])) \
+                     + '-blue)\n\n'
 
     if show_profile_view.lower() in truthy:
         data = run_v3_api(get_profile_view.substitute(owner=username, repo=username))
-        stats += '![Profile Views](http://img.shields.io/badge/' + quote(str(translate['Profile Views'])) + '-' + str(
+        stats += '![Profile Views](https://img.shields.io/badge/' + quote(str(translate['Profile Views'])) + '-' + str(
             data['count']) + '-blue)\n\n'
 
     if show_loc.lower() in truthy:
@@ -520,13 +518,13 @@ def get_stats(github):
 # requests.put("https://api.github.com/user/starred/anmol098/waka-readme-stats", headers=headers)
 
 def decode_readme(data: str):
-    '''Decode the contents of old readme'''
+    """Decode the contents of old readme"""
     decoded_bytes = base64.b64decode(data)
     return str(decoded_bytes, 'utf-8')
 
 
 def generate_new_readme(stats: str, readme: str):
-    '''Generate a new Readme.md'''
+    """Generate a new Readme.md"""
     stats_in_readme = f"{START_COMMENT}\n{stats}\n{END_COMMENT}"
     return re.sub(listReg, stats_in_readme, readme)
 
