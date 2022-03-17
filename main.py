@@ -494,17 +494,17 @@ def get_stats(github):
         else:
             request_data = request.json()
             stats += '![Code Time](https://img.shields.io/badge/' + quote(str("Code Time")) + '-' + quote(str(request_data['data']['text'])) \
-                     + '-blue)\n\n'
+                     + '-blue?style=for-the-badge)\n\n'
 
     if show_profile_view.lower() in truthy:
         request_data = run_v3_api(get_profile_view.substitute(owner=username, repo=username))
         stats += '![Profile Views](https://img.shields.io/badge/' + quote(str(translate['Profile Views'])) + '-' + str(
-            request_data['count']) + '-blue)\n\n'
+            request_data['count']) + '-blue?style=for-the-badge)\n\n'
 
     if show_loc.lower() in truthy:
         stats += '![Lines of code](https://img.shields.io/badge/' + quote(
             str(translate['From Hello World I have written'])) + '-' + quote(
-            str(get_line_of_code())) + '%20' + quote(str(translate['Lines of code'])) + '-blue)\n\n'
+            str(get_line_of_code())) + '%20' + quote(str(translate['Lines of code'])) + '-blue?style=for-the-badge)\n\n'
 
     if show_short_info.lower() in truthy:
         stats += get_short_info(github)
