@@ -1,4 +1,4 @@
-FROM python/3.11-alpine
+FROM python:3.11-alpine
 
 ADD requirements.txt /requirements.txt
 ADD main.py /main.py
