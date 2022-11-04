@@ -12,6 +12,11 @@ inputs:
     description: 'Your Wakatime API Key'
     required: true
 
+  WAKATIME_URL:
+    description: 'The wakatime url endpoint to use'
+    required: false
+    default: "https://wakapi.dev/api"
+
   SHOW_OS:
     required: false
     description: 'Show the list of OS Worked on In dev metrics'
@@ -86,12 +91,12 @@ inputs:
     required: false
     description: "Repos you don't want to be counted"
     default: ""
-  
+
   COMMIT_MESSAGE:
     required: false
     description: "Git commit message"
     default: "Updated with Dev Metrics"
-  
+
   SHOW_UPDATED_DATE:
     required: false
     description: "Show updated date"
