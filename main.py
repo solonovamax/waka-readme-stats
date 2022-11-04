@@ -18,8 +18,6 @@ from dotenv import load_dotenv
 from github import Github, InputGitAuthor
 from pytz import timezone
 
-from loc import LinesOfCode
-
 load_dotenv()
 
 START_COMMENT = '<!--START_SECTION:waka-->'
@@ -423,23 +421,23 @@ def generate_language_per_repo(result):
     return '**' + title + '** \n\n' + '```text\n' + make_list(language_data) + '\n\n```\n'
 
 
-def get_yearly_data():
-    repository_list = run_query(repositoryListQuery.substitute(username=username, id=user_id))
-    loc = LinesOfCode(user_id, username, githubToken, repository_list, ignored_repos_name)
-    yearly_data = loc.calculateLoc()
-    if showLocChart.lower() in truthy:
-        loc.plotLoc(yearly_data)
-    return yearly_data
+# def get_yearly_data():
+#     repository_list = run_query(repositoryListQuery.substitute(username=username, id=user_id))
+#     loc = LinesOfCode(user_id, username, githubToken, repository_list, ignored_repos_name)
+#     yearly_data = loc.calculateLoc()
+#     if showLocChart.lower() in truthy:
+#         loc.plotLoc(yearly_data)
+#     return yearly_data
 
 
-def get_line_of_code():
-    repository_list = run_query(repositoryListQuery.substitute(username=username, id=user_id))
-    loc = LinesOfCode(user_id, username, githubToken, repository_list, ignored_repos_name)
-    yearly_data = loc.calculateLoc()
-    total_loc = sum(
-        [yearly_data[year][quarter][lang] for year in yearly_data for quarter in yearly_data[year] for lang in
-         yearly_data[year][quarter]])
-    return millify(int(total_loc))
+# def get_line_of_code():
+#     repository_list = run_query(repositoryListQuery.substitute(username=username, id=user_id))
+#     loc = LinesOfCode(user_id, username, githubToken, repository_list, ignored_repos_name)
+#     yearly_data = loc.calculateLoc()
+#     total_loc = sum(
+#         [yearly_data[year][quarter][lang] for year in yearly_data for quarter in yearly_data[year] for lang in
+#          yearly_data[year][quarter]])
+#     return millify(int(total_loc))
 
 
 def get_short_info(github):
@@ -489,27 +487,27 @@ def get_stats(github):
     #     # reduce the execution time
     #     yearly_data = get_yearly_data()
 
-    if show_total_code_time.lower() in truthy:
-        request = requests.get(
-            f"https://{waka_url}/v1/users/current/all_time_since_today?api_key={waka_key}")
-        if request.status_code == 401:
-            print("Error With WAKA time API returned " + str(request.status_code) + " Response " + str(request.json()))
-        elif "text" not in request.json()["data"]:
-            print("User stats are calculating. Try again later.")
-        else:
-            request_data = request.json()
-            stats += '![Code Time](https://img.shields.io/badge/' + quote(str("Code Time")) + '-' + quote(str(request_data['data']['text'])) \
-                     + '-blue?style=for-the-badge)\n\n'
+    # if show_total_code_time.lower() in truthy:
+    #     request = requests.get(
+    #         f"https://{waka_url}/v1/users/current/all_time_since_today?api_key={waka_key}")
+    #     if request.status_code == 401:
+    #         print("Error With WAKA time API returned " + str(request.status_code) + " Response " + str(request.json()))
+    #     elif "text" not in request.json()["data"]:
+    #         print("User stats are calculating. Try again later.")
+    #     else:
+    #         request_data = request.json()
+    #         stats += '![Code Time](https://img.shields.io/badge/' + quote(str("Code Time")) + '-' + quote(str(request_data['data']['text'])) \
+    #                  + '-blue?style=for-the-badge)\n\n'
 
     if show_profile_view.lower() in truthy:
         request_data = run_v3_api(get_profile_view.substitute(owner=username, repo=username))
         stats += '![Profile Views](https://img.shields.io/badge/' + quote(str(translate['Profile Views'])) + '-' + str(
             request_data['count']) + '-blue?style=for-the-badge)\n\n'
 
-    if show_loc.lower() in truthy:
-        stats += '![Lines of code](https://img.shields.io/badge/' + quote(
-            str(translate['From Hello World I have written'])) + '-' + quote(
-            str(get_line_of_code())) + '%20' + quote(str(translate['Lines of code'])) + '-blue?style=for-the-badge)\n\n'
+    # if show_loc.lower() in truthy:
+    #     stats += '![Lines of code](https://img.shields.io/badge/' + quote(
+    #         str(translate['From Hello World I have written'])) + '-' + quote(
+    #         str(get_line_of_code())) + '%20' + quote(str(translate['Lines of code'])) + '-blue?style=for-the-badge)\n\n'
 
     if show_short_info.lower() in truthy:
         stats += get_short_info(github)
