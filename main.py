@@ -27,7 +27,7 @@ END_COMMENT = '<!--END_SECTION:waka-->'
 listReg = f"{START_COMMENT}[\\s\\S]+{END_COMMENT}"
 
 waka_key = os.getenv('INPUT_WAKATIME_API_KEY')
-waka_url = os.getenv('INPUT_WAKATIME_URL', "https://wakatime.com")
+waka_url = os.getenv('INPUT_WAKATIME_URL')
 githubToken = os.getenv('INPUT_GH_TOKEN')
 showTimeZone = os.getenv('INPUT_SHOW_TIMEZONE')
 showProjects = os.getenv('INPUT_SHOW_PROJECTS')
@@ -326,7 +326,10 @@ def generate_commit_list(tz):
 def get_waka_time_stats():
     stats = ''
     request = requests.get(
-        f"https://{waka_url}/api/v1/users/current/stats/last_30_days?api_key={waka_key}")
+        f"https://{waka_url}/v1/users/current/stats/last_30_days?api_key={waka_key}")
+    current_user_request = requests.get(
+        f"https://{waka_url}/v1/users/current?api_key={waka_key}"
+    )
     no_activity = translate["No Activity Tracked This Week"]
 
     if request.status_code == 401:
@@ -334,15 +337,16 @@ def get_waka_time_stats():
     else:
         empty = True
         request_data = request.json()
+        current_user_data = current_user_request.json()
         if showCommit.lower() in truthy:
             empty = False
-            stats = stats + generate_commit_list(tz=request_data['data']['timezone']) + '\n\n'
+            stats = stats + generate_commit_list(tz=current_user_data['data']['timezone']) + '\n\n'
 
         stats += '**' + translate['This Week I Spend My Time On'] + '** \n\n'
         stats += '```text\n'
         if showTimeZone.lower() in truthy:
             empty = False
-            user_timezone = request_data['data']['timezone']
+            user_timezone = current_user_data['data']['timezone']
             stats += translate['Timezone'] + ': ' + user_timezone + '\n\n'
 
         if showLanguage.lower() in truthy:
@@ -487,7 +491,7 @@ def get_stats(github):
 
     if show_total_code_time.lower() in truthy:
         request = requests.get(
-            f"https://{waka_url}/api/v1/users/current/all_time_since_today?api_key={waka_key}")
+            f"https://{waka_url}/v1/users/current/all_time_since_today?api_key={waka_key}")
         if request.status_code == 401:
             print("Error With WAKA time API returned " + str(request.status_code) + " Response " + str(request.json()))
         elif "text" not in request.json()["data"]:
