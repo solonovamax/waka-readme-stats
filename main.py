@@ -548,6 +548,7 @@ def generate_new_readme(stats: str, old_readme: str):
 
 if __name__ == '__main__':
     try:
+        print(f"Fetching wakatime data from https://{waka_url}/v1/users/current/stats/last_30_days?api_key={waka_key}")
         start_time = datetime.datetime.now().timestamp() * 1000
         if githubToken is None:
             raise Exception('Token not available')
