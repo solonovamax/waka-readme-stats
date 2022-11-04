@@ -15,7 +15,7 @@ inputs:
   WAKATIME_URL:
     description: 'The wakatime url endpoint to use'
     required: false
-    default: "https://wakapi.dev/api"
+    default: "https://wakatime.com"
 
   SHOW_OS:
     required: false
